@@ -41,7 +41,9 @@
     display:flex; align-items:center; justify-content:center;
     flex-direction:column; padding:24px;
     opacity:0; pointer-events:none;
-    transition:opacity .6s ease;
+    transition:opacity .3s ease;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
   }
   .scene.active{ opacity:1; pointer-events:auto; }
   .eyebrow{
@@ -846,7 +848,11 @@
     });
   });
 
+  let isTransitioning = false;
+
   function handleOptionClick(){
+    if(isTransitioning) return;
+    isTransitioning = true;
     const btn = this;
     const step = btn.dataset.step;
     const scene = document.getElementById('scene-' + step);
@@ -857,6 +863,7 @@
     setTimeout(() => {
       scene.classList.remove('active');
       goToStep(stepIndex + 1);
+      setTimeout(() => { isTransitioning = false; }, 320);
     }, 350);
   }
 
